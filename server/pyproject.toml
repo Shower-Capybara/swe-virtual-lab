@@ -12,6 +12,7 @@ faker = "^30.8.2"
 asyncpg = "^0.30.0"
 pydantic-settings = "^2.6.1"
 fastapi = "^0.115.4"
+greenlet = "^3.1.1"
 
 [build-system]
 requires = ["poetry-core"]

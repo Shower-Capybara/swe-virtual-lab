@@ -1,8 +1,6 @@
 from fastapi import FastAPI
 
+from .quizes.routes import router
+
 app = FastAPI()
-
-
-@app.get("/")
-def hello():
-    return "hello world"
+app.include_router(router, prefix="/quizes")
