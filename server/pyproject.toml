@@ -2,9 +2,7 @@
 name = "server"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
-package-mode = false
-
+authors = []
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -12,7 +10,8 @@ sqlalchemy = "^2.0.36"
 python-dotenv = "^1.0.1"
 faker = "^30.8.2"
 asyncpg = "^0.30.0"
-
+pydantic-settings = "^2.6.1"
+fastapi = "^0.115.4"
 
 [build-system]
 requires = ["poetry-core"]
