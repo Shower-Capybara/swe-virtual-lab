@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     DB_PORT: str
     DB_NAME: str
     JWT_SECRET: str
+    REDIS_URL: str
 
     model_config = SettingsConfigDict(
         env_file=find_dotenv(".env", usecwd=True),

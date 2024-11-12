@@ -5,9 +5,11 @@ from fastapi.responses import JSONResponse
 from sqlalchemy import sql
 from starlette import status
 
+from server.authentication.utils import User, protected_route
 from server.config import settings
 from server.db import DbSession
-from server.db.models import User
+from server.db.models import User as UserTable
+from server.state import redis
 
 from .jwt import generate_jwt
 from .schemas import LoginBody
@@ -18,8 +20,8 @@ router = APIRouter(tags=["auth"])
 @router.post("/login")
 async def login(db_session: DbSession, body: LoginBody):
     query = (
-        sql.select(User.password, User.role)
-        .where(User.username == body.username)
+        sql.select(UserTable.password, UserTable.role)
+        .where(UserTable.username == body.username)
         .limit(1)
     )
     cursor_result = await db_session.execute(query)
@@ -50,3 +52,9 @@ async def login(db_session: DbSession, body: LoginBody):
             )
         }
     )
+
+
+@router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
+@protected_route
+async def logout(user: User):
+    await redis.set(name=f"revoked:{user.token}", value="1", ex=86400)

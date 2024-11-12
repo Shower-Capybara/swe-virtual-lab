@@ -13,14 +13,15 @@ from starlette.routing import BaseRoute, Match
 from starlette.staticfiles import StaticFiles
 from starlette.types import Scope
 
-from server.authentication.schemas import AutheticatedUser
-from server.authentication.utils import (
+from .authentication.schemas import AutheticatedUser
+from .authentication.utils import (
     is_route_protected,
     process_header,
     set_user,
 )
-from server.config import settings
-from server.routes.auth.jwt import InvalidJwtTokenException, validate_jwt_token
+from .config import settings
+from .routes.auth.jwt import InvalidJwtTokenException, validate_jwt_token
+from .state import redis
 
 
 def match_routes(routes: list[BaseRoute], scope: Scope) -> FunctionType | None:
@@ -90,9 +91,15 @@ class AuthenticationMiddleware(BaseHTTPMiddleware):
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
 
+        if await redis.get(f"revoked:{token}") is not None:
+            return JSONResponse(
+                {"detail": "JWT token is revoked"},
+                status_code=status.HTTP_401_UNAUTHORIZED,
+            )
+
         set_user(
             request=request,
-            user=AutheticatedUser(username=payload["username"]),
+            user=AutheticatedUser(username=payload["username"], token=token),
         )
 
         return await call_next(request)
