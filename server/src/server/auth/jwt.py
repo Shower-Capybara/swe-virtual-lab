@@ -10,22 +10,29 @@ class InvalidJwtTokenException(Exception):
 
 class JwtPayload(TypedDict):
     username: str
-    exp: datetime
+    exp: int
 
 
 def generate_jwt(username: str, jwt_secret: str) -> str:
     payload: JwtPayload = {
         "username": username,
-        "exp": datetime.now(timezone.utc) + timedelta(days=1),
+        "exp": int((datetime.now(timezone.utc) + timedelta(days=1)).timestamp()),
     }
     return jwt.encode(claims=payload, key=jwt_secret, algorithm="HS256")  # type: ignore[reportArgumentType]
 
 
 def validate_jwt_token(token: str, jwt_secret: str) -> JwtPayload:
     try:
-        return cast(
+        payload = cast(
             JwtPayload,
             jwt.decode(token=token, key=jwt_secret, algorithms=["HS256"]),
         )
     except JWTError as e:
-        raise InvalidJwtTokenException from e
+        raise InvalidJwtTokenException("Invalid JWT token") from e
+
+    if payload["exp"] <= int(
+        (datetime.now(timezone.utc) - timedelta(days=1)).timestamp()
+    ):
+        raise InvalidJwtTokenException("JWT token has expired")
+
+    return payload

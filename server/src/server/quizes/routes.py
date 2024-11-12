@@ -5,6 +5,8 @@ from sqlalchemy import func, sql
 from starlette import status
 from starlette.responses import JSONResponse
 
+from server.authentication.utils import protected_route
+
 from ..db import DbSession
 from ..db.models import Quiz, QuizQuestion, QuizQuestionOption
 from ..db.utils import empty_array, json_build_object
@@ -13,6 +15,7 @@ router = APIRouter()
 
 
 @router.get("")
+@protected_route
 async def list_quizes(
     db_session: DbSession,
     limit: int = 20,
@@ -41,6 +44,7 @@ async def list_quizes(
 
 
 @router.get("/{id}")
+@protected_route
 async def get_quiz(db_session: DbSession, id: Annotated[int, Path()]):
     questions_subquery = (
         sql.select(
