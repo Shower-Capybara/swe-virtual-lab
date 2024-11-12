@@ -6,10 +6,9 @@ from starlette import status
 from starlette.responses import JSONResponse
 
 from server.authentication.utils import protected_route
-
-from ..db import DbSession
-from ..db.models import Quiz, QuizQuestion, QuizQuestionOption
-from ..db.utils import empty_array, json_build_object
+from server.db import DbSession
+from server.db.models import Quiz, QuizQuestion, QuizQuestionOption
+from server.db.utils import empty_array, json_build_object
 
 router = APIRouter()
 

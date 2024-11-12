@@ -1,9 +1,9 @@
 from fastapi import FastAPI
 
-from .auth.routes import router as auth_router
 from .middlewares import AuthenticationMiddleware
-from .quizes.routes import router as quizes_router
-from .users.routes import router as users_router
+from .routes.auth.routes import router as auth_router
+from .routes.quizes.routes import router as quizes_router
+from .routes.users.routes import router as users_router
 
 app = FastAPI()
 

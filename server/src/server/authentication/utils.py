@@ -12,7 +12,7 @@ Func = Callable[P, T]
 
 
 def protected_route[**P, T](route_func: Callable[P, T]) -> Callable[P, T]:
-    route_func._protected = True
+    setattr(route_func, "_protected", True)
     return route_func
 
 

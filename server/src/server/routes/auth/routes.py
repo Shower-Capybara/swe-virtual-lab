@@ -6,9 +6,9 @@ from sqlalchemy import sql
 from starlette import status
 
 from server.config import settings
+from server.db import DbSession
+from server.db.models import User
 
-from ..db import DbSession
-from ..db.models import User
 from .jwt import generate_jwt
 from .schemas import LoginBody
 
@@ -50,5 +50,3 @@ async def login(db_session: DbSession, body: LoginBody):
             )
         }
     )
-
-

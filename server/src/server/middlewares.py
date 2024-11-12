@@ -13,7 +13,6 @@ from starlette.routing import BaseRoute, Match
 from starlette.staticfiles import StaticFiles
 from starlette.types import Scope
 
-from server.auth.jwt import InvalidJwtTokenException, validate_jwt_token
 from server.authentication.schemas import AutheticatedUser
 from server.authentication.utils import (
     is_route_protected,
@@ -21,6 +20,7 @@ from server.authentication.utils import (
     set_user,
 )
 from server.config import settings
+from server.routes.auth.jwt import InvalidJwtTokenException, validate_jwt_token
 
 
 def match_routes(routes: list[BaseRoute], scope: Scope) -> FunctionType | None:
