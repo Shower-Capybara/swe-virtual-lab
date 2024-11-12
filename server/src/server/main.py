@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 
-from .quizes.routes import router
+from .auth.routes import router as auth_router
+from .quizes.routes import router as quizes_router
 
 app = FastAPI()
-app.include_router(router, prefix="/quizes")
+app.include_router(quizes_router, prefix="/quizes", tags=["quizes"])
+app.include_router(auth_router, prefix="/auth", tags=["auth"])

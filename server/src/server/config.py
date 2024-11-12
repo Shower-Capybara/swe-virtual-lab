@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     DB_HOST: str
     DB_PORT: str
     DB_NAME: str
+    JWT_SECRET: str
 
     model_config = SettingsConfigDict(
         env_file=find_dotenv(".env", usecwd=True),

@@ -12,6 +12,7 @@ class User(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    username: Mapped[str] = mapped_column(String(256), unique=True)
     name: Mapped[str] = mapped_column(String(256))
     password: Mapped[str] = mapped_column(String(256))
     role: Mapped[str] = mapped_column(String(50))

@@ -9,7 +9,7 @@ from ..db import DbSession
 from ..db.models import Quiz, QuizQuestion, QuizQuestionOption
 from ..db.utils import empty_array, json_build_object
 
-router = APIRouter(tags=["quizes"])
+router = APIRouter()
 
 
 @router.get("")
