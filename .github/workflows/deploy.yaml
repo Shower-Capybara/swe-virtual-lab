@@ -13,6 +13,6 @@ jobs:
       run:
         echo '${{ secrets.env_file }}' > .env
     - name: Build and run
-      run: 
+      run: |
         docker build . --tag swe-lab
         docker run -d -p 80:80 --env-file .env swe-lab
