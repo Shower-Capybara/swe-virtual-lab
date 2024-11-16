@@ -15,5 +15,5 @@ jobs:
     - name: Build and run
       run: |
         docker build . --tag swe-lab
-        docker stop server
+        docker stop server || true
         docker run -d --name server -p 80:80 --env-file .env swe-lab
