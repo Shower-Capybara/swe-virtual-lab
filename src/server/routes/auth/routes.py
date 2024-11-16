@@ -12,12 +12,12 @@ from server.db.models import User as UserTable
 from server.state import redis
 
 from .jwt import generate_jwt
-from .schemas import LoginBody
+from .schemas import LoginBody, LoginResponse
 
 router = APIRouter(tags=["auth"])
 
 
-@router.post("/login")
+@router.post("/login", response_model=LoginResponse)
 async def login(db_session: DbSession, body: LoginBody):
     query = (
         sql.select(UserTable.password, UserTable.role)
@@ -45,12 +45,11 @@ async def login(db_session: DbSession, body: LoginBody):
             status_code=status.HTTP_403_FORBIDDEN,
         )
 
-    return JSONResponse(
-        {
-            "access_token": generate_jwt(
-                username=body.username, jwt_secret=settings.JWT_SECRET
-            )
-        }
+    return LoginResponse(
+        access_token=generate_jwt(
+            username=body.username,
+            jwt_secret=settings.JWT_SECRET,
+        )
     )
 
 
