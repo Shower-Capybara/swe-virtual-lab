@@ -167,6 +167,7 @@ async def list_quizes(
 
 async def get_quiz_stats(
     db_session: AsyncSession,
+    ids: list[int] | None = None,
     success_threshold: float = 0.2,
 ) -> QuizStats:
     quiz_question_answers = (
@@ -217,6 +218,9 @@ async def get_quiz_stats(
             .label("avg_time_spent_sec")
         ),
     )
+
+    if ids:
+        query = query.where(Quiz.id.in_(ids))
 
     result = await db_session.execute(query)
     stats = result.mappings().one()

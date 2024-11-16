@@ -29,8 +29,11 @@ async def list_quizes(
 
 @router.get("/stats", response_model=QuizStats)
 @protected_route
-async def get_quiz_stats(db_session: DbSession):
-    return await services.get_quiz_stats(db_session=db_session)
+async def get_quiz_stats(
+    db_session: DbSession,
+    ids: list[int] | None = None,
+):
+    return await services.get_quiz_stats(db_session=db_session, ids=ids)
 
 
 @router.get("/{id}", response_model=QuizDetailSchema)
