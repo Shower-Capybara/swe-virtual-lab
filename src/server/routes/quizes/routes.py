@@ -10,6 +10,9 @@ from server.db import DbSession
 from server.db.models import Quiz, QuizQuestion, QuizQuestionOption
 from server.db.utils import empty_array, json_build_object
 
+from . import services
+from .schemas import QuizStats
+
 router = APIRouter()
 
 
@@ -40,6 +43,12 @@ async def list_quizes(
         .offset(offset)
     )
     return cursor_result.mappings().all()
+
+
+@router.get("/stats", response_model=QuizStats)
+@protected_route
+async def get_quiz_stats(db_session: DbSession):
+    return await services.get_quiz_stats(db_session=db_session)
 
 
 @router.get("/{id}")
