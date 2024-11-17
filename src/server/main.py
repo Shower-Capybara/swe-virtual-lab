@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
 from .middlewares import AuthenticationMiddleware
 from .routes.auth.routes import router as auth_router
@@ -18,3 +19,10 @@ app.include_router(
 )
 
 app.add_middleware(AuthenticationMiddleware)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
