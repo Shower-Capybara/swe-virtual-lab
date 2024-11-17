@@ -5,6 +5,7 @@ from .middlewares import AuthenticationMiddleware
 from .routes.auth.routes import router as auth_router
 from .routes.platform_stats.routes import router as platform_stats_router
 from .routes.quizes.routes import router as quizes_router
+from .routes.students.routes import router as students_router
 from .routes.users.routes import router as users_router
 
 app = FastAPI()
@@ -16,6 +17,11 @@ app.include_router(
     platform_stats_router,
     prefix="/platform_stats",
     tags=["platform_stats"],
+)
+app.include_router(
+    students_router,
+    prefix="/students",
+    tags=["students"],
 )
 
 app.add_middleware(AuthenticationMiddleware)
