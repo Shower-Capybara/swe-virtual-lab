@@ -27,6 +27,12 @@ async def list_students(
     )
 
 
+@router.get("/stats", response_model=StudentStats)
+@protected_route
+async def get_student_stats(db_session: DbSession):
+    return await services.get_student_stats(db_session=db_session)
+
+
 @router.get("/{username}", response_model=StudentDetailSchema)
 @protected_route
 async def get_student(db_session: DbSession, username: Annotated[str, Path()]):
@@ -43,9 +49,3 @@ async def get_student(db_session: DbSession, username: Annotated[str, Path()]):
         )
 
     return students[0]
-
-
-@router.get("/stats", response_model=StudentStats)
-@protected_route
-async def get_student_stats(db_session: DbSession):
-    return await services.get_student_stats(db_session=db_session)
