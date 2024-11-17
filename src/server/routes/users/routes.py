@@ -12,4 +12,4 @@ router = APIRouter()
 @router.get("/me", response_model=UserSchema)
 @protected_route
 async def get_me(db_session: DbSession, user: User):
-    return services.get_user(db_session=db_session, username=user.username)
+    return await services.get_user(db_session=db_session, username=user.username)
