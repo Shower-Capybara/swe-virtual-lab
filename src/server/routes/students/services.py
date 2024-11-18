@@ -3,6 +3,7 @@ from sqlalchemy import Float, case, cast, desc, func, select, sql, true
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from server.db.models import (
+    Quiz,
     QuizQuestionOption,
     QuizSubmission,
     QuizSubmissionAnswer,
@@ -155,6 +156,7 @@ async def list_students(
                             json_build_object(
                                 {
                                     "id": quiz_correct_submissions.c.quiz_id,
+                                    "title": Quiz.title,
                                     "successful_submissions_count": quiz_correct_submissions.c.successful_submissions_count,
                                     "total_submissions_count": quiz_correct_submissions.c.total_submissions_count,
                                     "avg_spent_time_seconds": quiz_correct_submissions.c.avg_spent_time_seconds,
@@ -164,6 +166,8 @@ async def list_students(
                         empty_array(),
                     )
                 )
+                .select_from(quiz_correct_submissions)
+                .join(Quiz, quiz_correct_submissions.c.quiz_id == Quiz.id)
                 .where(quiz_correct_submissions.c.user_id == User.id)
                 .scalar_subquery()
                 .label("quizes")

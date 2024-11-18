@@ -16,6 +16,7 @@ class StudentStats(BaseModel):
 
 class StudentQuiz(BaseModel):
     id: int
+    title: str
     successful_submissions_count: int
     total_submissions_count: int
     avg_spent_time_seconds: int
