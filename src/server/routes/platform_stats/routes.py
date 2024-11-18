@@ -1,6 +1,8 @@
 from datetime import date
 
 from fastapi import APIRouter
+from starlette import status
+from starlette.responses import JSONResponse
 
 from server.authentication.utils import protected_route
 from server.db import DbSession
@@ -26,6 +28,12 @@ async def get_daily_platform_stats_distribution(
     limit: int = 50,
     offset: int = 0,
 ):
+    if start_date >= end_date:
+        return JSONResponse(
+            content={"detail": "Start date should be less than the end date"},
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        )
+
     return await services.get_daily_platform_stats_distribution(
         db_session=db_session,
         start_date=start_date,
