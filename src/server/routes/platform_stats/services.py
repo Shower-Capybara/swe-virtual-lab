@@ -29,7 +29,7 @@ async def get_platform_stats(db_session: AsyncSession) -> PlatformStats:
     return PlatformStats(
         most_popular_page=most_popular_page,
         monthly_active_users_count=monthly_active_users,
-        current_online_users_count=0,
+        current_online_users_count=1,
     )
 
 
