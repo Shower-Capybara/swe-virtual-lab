@@ -171,7 +171,7 @@ async def list_students(
         )
         .join(submission_stats, true(), isouter=True)
         .where(User.role == "student")
-        .order_by(User.created_at.desc())
+        .order_by(desc("successful_submissions"))
         .limit(limit)
         .offset(offset)
     )
