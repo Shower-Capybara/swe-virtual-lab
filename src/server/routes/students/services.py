@@ -234,7 +234,8 @@ async def get_student_stats(
 
     query = select(
         (
-            select(func.count(func.distinct(QuizSubmission.user_id)))
+            select(func.count("*"))
+            .where(User.role == "student")
             .scalar_subquery()
             .label("total_students")
         ),
