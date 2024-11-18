@@ -3,15 +3,17 @@ from types import FunctionType
 from typing import Any, Callable
 
 from fastapi import FastAPI, Request, Response
+from redis.asyncio import Redis
 from starlette import status
 from starlette.middleware.base import (
     BaseHTTPMiddleware,
+    DispatchFunction,
     RequestResponseEndpoint,
 )
 from starlette.responses import JSONResponse
 from starlette.routing import BaseRoute, Match
 from starlette.staticfiles import StaticFiles
-from starlette.types import Scope
+from starlette.types import ASGIApp, Scope
 
 from .authentication.schemas import AutheticatedUser
 from .authentication.utils import (
@@ -21,7 +23,6 @@ from .authentication.utils import (
 )
 from .config import settings
 from .routes.auth.jwt import InvalidJwtTokenException, validate_jwt_token
-from .state import redis
 
 
 def match_routes(routes: list[BaseRoute], scope: Scope) -> FunctionType | None:
@@ -59,6 +60,15 @@ def _resolve_route(request: Request) -> Callable[..., Any] | None:
 
 
 class AuthenticationMiddleware(BaseHTTPMiddleware):
+    def __init__(
+        self,
+        app: ASGIApp,
+        redis: Redis,
+        dispatch: DispatchFunction | None = None,
+    ) -> None:
+        self._redis = redis
+        super().__init__(app, dispatch)
+
     async def dispatch(
         self,
         request: Request,
@@ -91,7 +101,7 @@ class AuthenticationMiddleware(BaseHTTPMiddleware):
                 status_code=status.HTTP_401_UNAUTHORIZED,
             )
 
-        if await redis.get(f"revoked:{token}") is not None:
+        if await self._redis.get(f"revoked:{token}") is not None:
             return JSONResponse(
                 {"detail": "JWT token is revoked"},
                 status_code=status.HTTP_401_UNAUTHORIZED,

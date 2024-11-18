@@ -1,10 +1,13 @@
 from collections.abc import Callable
-from typing import Annotated
+from typing import Annotated, ParamSpec, TypeVar
 
 from fastapi import Depends, Request
 from fastapi.security.utils import get_authorization_scheme_param
 
 from .schemas import AutheticatedUser
+
+T = TypeVar("T")
+P = ParamSpec("P")
 
 
 def protected_route[**P, T](route_func: Callable[P, T]) -> Callable[P, T]:

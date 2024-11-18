@@ -7,6 +7,7 @@ from .routes.platform_stats.routes import router as platform_stats_router
 from .routes.quizes.routes import router as quizes_router
 from .routes.students.routes import router as students_router
 from .routes.users.routes import router as users_router
+from .state import redis
 
 app = FastAPI()
 
@@ -24,7 +25,7 @@ app.include_router(
     tags=["students"],
 )
 
-app.add_middleware(AuthenticationMiddleware)
+app.add_middleware(AuthenticationMiddleware, redis=redis)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
