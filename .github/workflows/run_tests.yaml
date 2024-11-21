@@ -26,4 +26,4 @@ jobs:
       run: poetry install --no-interaction
 
     - name: Run tests
-      run: poetry run pytest
+      run: ENV=testing poetry run pytest -s
