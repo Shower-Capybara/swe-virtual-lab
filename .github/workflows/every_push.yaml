@@ -1,0 +1,13 @@
+name: Every Push Check
+run-name: ${{ github.actor }} started an Every Push Check Pipeline run 🚀
+on:
+    push:
+        branches: [ "main" ]
+
+jobs:
+  Call-Test:
+    uses: ./.github/workflows/run_tests.yml
+    secrets: inherit
+  Deploy:
+    uses: ./.github/workflows/deploy.yml
+    secrets: inherit
