@@ -1,5 +1,5 @@
 from pydantic import TypeAdapter
-from sqlalchemy import Float, case, cast, func, select, sql, true
+from sqlalchemy import Float, case, cast, desc, func, select, sql, true
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from server.db.models import (
@@ -153,7 +153,10 @@ async def list_quizes(
             isouter=True,
         )
         .join(quiz_questions_list, true(), isouter=True)
-        .order_by(Quiz.created_at.desc())
+        .order_by(
+            desc("total_submissions_count"),
+            desc("successful_submissions_count"),
+        )
         .limit(limit)
         .offset(offset)
     )
