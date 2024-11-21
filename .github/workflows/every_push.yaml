@@ -6,8 +6,9 @@ on:
 
 jobs:
   Call-Test:
-    uses: ./.github/workflows/run_tests.yml
+    uses: ./.github/workflows/run_tests.yaml
     secrets: inherit
   Deploy:
-    uses: ./.github/workflows/deploy.yml
+    needs: Call-Test
+    uses: ./.github/workflows/deploy.yaml
     secrets: inherit
